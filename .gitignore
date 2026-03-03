@@ -27,6 +27,22 @@ go.work.sum
 # env file
 .env
 
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Valk Guard output
+valk-guard.json
+valk-guard.rdjsonl
+*.sarif
+
 # Editor/IDE
-# .idea/
-# .vscode/
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

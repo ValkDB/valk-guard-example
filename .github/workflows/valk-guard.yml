@@ -1,0 +1,153 @@
+name: Valk Guard
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  # Version strategy for this example: latest published valk-guard.
+  # Rationale: demo repo should track current built-in behavior.
+  # For reproducible pinning, replace "latest" with a fixed tag (for example v1.x.y).
+  VALK_GUARD_INSTALL_REF: latest
+
+jobs:
+  scan:
+    name: SQL Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.6'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install valk-guard
+        run: go install github.com/valkdb/valk-guard/cmd/valk-guard@${VALK_GUARD_INSTALL_REF}
+
+      - name: Initialize findings report
+        run: echo "[]" > valk-guard.json
+
+      - name: Collect changed SQL-related files
+        if: github.event_name == 'pull_request'
+        id: changed
+        run: |
+          base_sha="${{ github.event.pull_request.base.sha }}"
+          head_sha="${{ github.event.pull_request.head.sha }}"
+
+          files="$(git diff --name-only --diff-filter=ACMRT "$base_sha" "$head_sha" | grep -E '\.(sql|go|py)$' || true)"
+
+          if [ -z "$files" ]; then
+            echo "has_files=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          printf '%s\n' "$files" > changed-files.txt
+          echo "has_files=true" >> "$GITHUB_OUTPUT"
+
+      - name: Run valk-guard (PR — changed files only)
+        if: github.event_name == 'pull_request' && steps.changed.outputs.has_files == 'true'
+        run: |
+          mapfile -t files < changed-files.txt
+
+          set +e
+          valk-guard scan "${files[@]}" --config .valk-guard.yaml --format json > valk-guard.json
+          code=$?
+          set -e
+
+          if [ "$code" -gt 1 ]; then
+            exit "$code"
+          fi
+
+      - name: Run valk-guard (push — full scan)
+        if: github.event_name == 'push'
+        run: |
+          set +e
+          valk-guard scan . --config .valk-guard.yaml --format json > valk-guard.json
+          code=$?
+          set -e
+
+          if [ "$code" -gt 1 ]; then
+            exit "$code"
+          fi
+
+      - name: Enforce clean baseline on main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          if jq -e 'length == 0' valk-guard.json >/dev/null; then
+            echo "Baseline clean: no findings on main."
+          else
+            echo "Baseline is not clean. Findings:"
+            jq . valk-guard.json
+            exit 1
+          fi
+
+      - name: Upload findings artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: valk-guard-findings
+          path: valk-guard.json
+          if-no-files-found: error
+
+      - uses: reviewdog/action-setup@v1
+        if: github.event_name == 'pull_request' && steps.changed.outputs.has_files == 'true'
+
+      - name: Convert to reviewdog format
+        if: github.event_name == 'pull_request' && steps.changed.outputs.has_files == 'true'
+        run: |
+          jq -cr '
+            .[] |
+            {
+              source: {
+                name: "valk-guard",
+                url: "https://github.com/ValkDB/valk-guard"
+              },
+              severity: (
+                if .severity == "error" then "ERROR"
+                elif .severity == "warning" then "WARNING"
+                else "INFO"
+                end
+              ),
+              code: { value: .rule_id },
+              message: (.rule_id + ": " + .message),
+              location: {
+                path: .file,
+                range: {
+                  start: { line: .line, column: (.column // 1) },
+                  end:   { line: .line, column: ((.column // 1) + 1) }
+                }
+              }
+            }
+          ' valk-guard.json > valk-guard.rdjsonl
+
+      - name: Post PR review comments
+        if: github.event_name == 'pull_request' && steps.changed.outputs.has_files == 'true'
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ ! -s valk-guard.rdjsonl ]; then
+            echo "No valk-guard findings."
+            exit 0
+          fi
+
+          reviewdog \
+            -f=rdjsonl \
+            -name="valk-guard" \
+            -reporter=github-pr-review \
+            -filter-mode=added \
+            -fail-level=none \
+            < valk-guard.rdjsonl

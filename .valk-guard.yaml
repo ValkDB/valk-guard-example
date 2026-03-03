@@ -1,0 +1,65 @@
+format: terminal
+
+exclude:
+  - "vendor/**"
+  - "node_modules/**"
+
+# Keep Go extraction strict on baseline so inferred-mapping warnings stay off.
+go_model:
+  mapping_mode: strict
+
+rules:
+  VG001:
+    enabled: true
+    severity: warning
+  VG002:
+    enabled: true
+    severity: error
+  VG003:
+    enabled: true
+    severity: error
+  VG004:
+    enabled: true
+    severity: warning
+  VG005:
+    enabled: true
+    severity: warning
+  VG006:
+    enabled: true
+    severity: error
+  VG007:
+    enabled: true
+    severity: error
+  VG008:
+    enabled: true
+    severity: warning
+  VG101:
+    enabled: true
+    severity: error
+  VG102:
+    enabled: true
+    severity: warning
+  VG103:
+    enabled: true
+    severity: warning
+  VG104:
+    enabled: true
+    severity: error
+  VG105:
+    enabled: true
+    severity: error
+  VG106:
+    enabled: true
+    severity: error
+
+  # This example repo is focused on VG001-VG106 demo branches.
+  VG107:
+    enabled: false
+  VG108:
+    enabled: false
+  VG109:
+    enabled: false
+  VG110:
+    enabled: false
+  VG111:
+    enabled: false
