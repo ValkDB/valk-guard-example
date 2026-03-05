@@ -106,6 +106,21 @@ Separate snippets for schema-aware rules are in:
 - `docs/schema-aware-demos/VG105.md`
 - `docs/schema-aware-demos/VG106.md`
 
+## Suppression Demo
+
+Inline and global suppression examples are in:
+
+- `demo/suppressions/README.md`
+- `demo/suppressions/inline/`
+- `demo/suppressions/config/global_disable_vg001.yaml`
+
+Quick verify:
+
+```bash
+valk-guard scan demo/suppressions/inline --config .valk-guard.yaml --format json
+valk-guard scan demo/suppressions/inline --config demo/suppressions/config/global_disable_vg001.yaml --format json
+```
+
 ## License
 
 [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
