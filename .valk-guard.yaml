@@ -4,9 +4,9 @@ exclude:
   - "vendor/**"
   - "node_modules/**"
 
-# Keep Go extraction strict on baseline so inferred-mapping warnings stay off.
+# Use balanced Go model mapping in demos so inferred-mapping risk (VG111) can be showcased.
 go_model:
-  mapping_mode: strict
+  mapping_mode: balanced
 
 rules:
   VG001:
@@ -52,14 +52,14 @@ rules:
     enabled: true
     severity: error
 
-  # This example repo is focused on VG001-VG106 demo branches.
+  # Dist demo branches cover VG001-VG111.
   VG107:
-    enabled: false
+    enabled: true
   VG108:
-    enabled: false
+    enabled: true
   VG109:
-    enabled: false
+    enabled: true
   VG110:
-    enabled: false
+    enabled: true
   VG111:
-    enabled: false
+    enabled: true
