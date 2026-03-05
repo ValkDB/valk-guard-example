@@ -106,6 +106,15 @@ Separate snippets for schema-aware rules are in:
 - `docs/schema-aware-demos/VG105.md`
 - `docs/schema-aware-demos/VG106.md`
 
+## Complex Query Patterns Demo
+
+For parser/extractor showcase coverage of advanced query shapes (CTE, `UNION ALL`, `LEFT JOIN`) across ORM and non-ORM paths:
+
+- `demo/complex-patterns/README.md`
+- `demo/complex-patterns/sql/complex_queries.sql`
+- `demo/complex-patterns/python/orm_complex.py`
+- `demo/complex-patterns/python/raw_complex.py`
+
 ## License
 
 [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
