@@ -1,13 +1,17 @@
-# Complex Query Patterns Showcase
+# Complex Query Patterns (Intentional Violations)
 
-This demo shows higher-complexity query constructs across both SQLAlchemy ORM and non-ORM execution paths.
+This demo intentionally introduces issues in higher-complexity query shapes across both ORM and non-ORM paths.
 
-Included patterns:
+Patterns covered:
 
 - CTE (`WITH ...`)
 - `UNION ALL`
 - `LEFT JOIN`
-- ordered and bounded result sets (`ORDER BY ... LIMIT ...`)
+
+Expected rule families:
+
+- `VG004` (unbounded selects / missing limit)
+- `VG106` (unknown filter column on joined table)
 
 Files:
 
@@ -15,4 +19,9 @@ Files:
 - `python/orm_complex.py`
 - `python/raw_complex.py`
 
-Use this folder when validating parser/extractor behavior on realistic query shapes.
+Local verification on this branch currently yields:
+
+- 8 findings of `VG004`
+- 2 findings of `VG106`
+
+Use this folder as a stress-case fixture for parser/extractor behavior and complex-query rule coverage.

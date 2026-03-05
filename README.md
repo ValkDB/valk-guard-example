@@ -108,7 +108,7 @@ Separate snippets for schema-aware rules are in:
 
 ## Complex Query Patterns Demo
 
-For parser/extractor showcase coverage of advanced query shapes (CTE, `UNION ALL`, `LEFT JOIN`) across ORM and non-ORM paths:
+For parser/extractor showcase coverage of advanced query shapes (CTE, `UNION ALL`, `LEFT JOIN`) across ORM and non-ORM paths with intentional findings:
 
 - `demo/complex-patterns/README.md`
 - `demo/complex-patterns/sql/complex_queries.sql`
