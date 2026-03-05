@@ -56,13 +56,14 @@ valk-guard-example/
 Workflow install target is configured as:
 
 ```text
-github.com/valkdb/valk-guard/cmd/valk-guard@latest
+github.com/valkdb/valk-guard/cmd/valk-guard.0.0-20260304065917-b9d9468a4ea3@latest
 ```
 
 Rationale:
 
-- This repository is a demo showcase; tracking latest keeps examples aligned with current built-in behavior.
-- If you need strict reproducibility, pin a fixed tag in workflow `VALK_GUARD_INSTALL_REF`.
+- This repository is a demo showcase, but CI is pinned to a known-good valk-guard build to keep output shape stable.
+- Pinning avoids format drift that can break downstream tooling steps (for example: `Convert to reviewdog format`).
+- When upgrading, bump `VALK_GUARD_INSTALL_REF` intentionally and verify the full workflow output.
 
 ## Creating Demo PRs (one rule at a time)
 
