@@ -3,6 +3,8 @@ package goqu
 
 import "time"
 
+// Left-join demo branch keeps this model file in the changed-file scan context.
+
 // Order represents a customer order.
 type Order struct {
 	ID        int64     `db:"id"         goqu:"skipinsert"`

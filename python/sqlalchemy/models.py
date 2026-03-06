@@ -1,6 +1,7 @@
 """SQLAlchemy model definitions.
 
 Clean ORM model declarations — no SQL anti-patterns here.
+This file is also touched in the LEFT JOIN demo branch so schema-aware rules keep model context.
 """
 
 from sqlalchemy import Boolean, Column, DateTime, Float, Integer, String, func

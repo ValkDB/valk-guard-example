@@ -1,3 +1,4 @@
+-- Left-join demo branch keeps this migration file in the changed-file scan context.
 -- 001_create_tables.sql
 -- Clean schema setup. No anti-patterns — valk-guard should report zero findings here.
 
