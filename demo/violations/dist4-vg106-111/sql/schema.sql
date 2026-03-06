@@ -1,0 +1,18 @@
+CREATE TABLE q_users (
+  id INTEGER PRIMARY KEY,
+  email TEXT NOT NULL
+);
+
+CREATE TABLE q_orders (
+  id INTEGER PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES q_users(id)
+);
+
+CREATE TABLE vg110_users (
+  id INTEGER PRIMARY KEY,
+  email TEXT NOT NULL
+);
+
+CREATE TABLE vg109_orphan (
+  id INTEGER PRIMARY KEY
+);
