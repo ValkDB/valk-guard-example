@@ -1,0 +1,18 @@
+CREATE TABLE vg101_users (
+  id INTEGER PRIMARY KEY
+);
+
+CREATE TABLE vg102_accounts (
+  id INTEGER PRIMARY KEY,
+  required_code TEXT NOT NULL
+);
+
+CREATE TABLE vg103_orders (
+  id INTEGER PRIMARY KEY,
+  total NUMERIC(10,2) NOT NULL
+);
+
+CREATE TABLE vg105_users (
+  id INTEGER PRIMARY KEY,
+  email TEXT NOT NULL
+);
