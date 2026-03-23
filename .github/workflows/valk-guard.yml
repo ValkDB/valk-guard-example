@@ -36,6 +36,7 @@ jobs:
             **/*.sql
             **/*.go
             **/*.py
+            **/*.cs
 
       - uses: reviewdog/action-setup@v1
         if: steps.changed.outputs.any_changed == 'true'
