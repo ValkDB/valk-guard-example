@@ -9,7 +9,7 @@ permissions:
   pull-requests: write
 
 env:
-  VALK_GUARD_INSTALL_REF: v0.1.3
+  VALK_GUARD_INSTALL_REF: v0.1.5
 
 jobs:
   scan:
@@ -21,7 +21,11 @@ jobs:
 
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.25.6"
+          go-version: "1.25.10"
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "8.0.x"
 
       - name: Install valk-guard
         run: go install github.com/valkdb/valk-guard/cmd/valk-guard@${VALK_GUARD_INSTALL_REF}
@@ -36,6 +40,7 @@ jobs:
             **/*.sql
             **/*.go
             **/*.py
+            **/*.cs
 
       - uses: reviewdog/action-setup@v1
         if: steps.changed.outputs.any_changed == 'true'
