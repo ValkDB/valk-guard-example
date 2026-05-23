@@ -56,13 +56,14 @@ valk-guard-example/
 Workflow install target is configured as:
 
 ```text
-github.com/valkdb/valk-guard/cmd/valk-guard@latest
+github.com/valkdb/valk-guard/cmd/valk-guard@v0.1.5
 ```
 
 Rationale:
 
 - This repository is a demo showcase; tracking latest keeps examples aligned with current built-in behavior.
 - If you need strict reproducibility, pin a fixed tag in workflow `VALK_GUARD_INSTALL_REF`.
+- C# demo PRs require a Valk Guard version with the C# scanner and a .NET SDK in CI.
 
 ## Creating Demo PRs (one rule at a time)
 
